@@ -5,6 +5,7 @@ import pandas as pd
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import roc_auc_score, roc_curve
+from sklearn.model_selection import train_test_split #für Stratifizierung der Trainings-/Testdaten
 
 st.set_page_config(page_title="BGA Classification", page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
 
@@ -14,6 +15,17 @@ st.header("BGA Classification")
 ################################
 ## Choose which input is used ##
 ################################
+
+###### Example data ######
+file_path = 'filtered_population.xlsx'
+data = pd.read_excel(file_path, nrows=212) #just use the first two categories of the file as example data
+X = data.drop(data.columns[0], axis=1)
+y = data.iloc[:, 0]  # population as target
+
+#20% als Testdaten, Rest als Trainingsdaten
+#Split der Daten unter Beibehaltung der Verteilung der Populations-Kategorien
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+
 
 ###### Trainingsdaten ######
 train_options = [
@@ -25,19 +37,18 @@ train = st.radio(
     index=0,
 )
 
-if train == train_options[0]:
-    file_path = 'filtered_population.xlsx'
-    #train_data = pd.read_excel(file_path)
-else:
+if train == train_options[1]:
     st.session_state.train_file = st.file_uploader("Uploading training data: ", type=["xlsx", "xls"])
     if st.session_state.train_file:
         train_data = pd.read_excel(st.session_state.train_file)
-        #st.write("Training data:")
-        #st.dataframe(train_data)
+        X_train = train_data.drop(train_data.columns[0], axis=1)
+        y_train = train_data.iloc[:, 0]
         #try:
             #train_data = pd.read_excel(st.session_state.train_file)
         #except Exception as e:
             #st.error(f"Error reading the file: {e}")
+        #st.write("Training data:")
+        #st.dataframe(train_data)
 
 
 ###### Testdaten ######
@@ -50,13 +61,12 @@ test = st.radio(
     index=0,
 )
 
-if test == test_options[0]:
-    file_path = 'filtered_population.xlsx'
-    #test_data = pd.read_excel(file_path)
-else:
+if test == test_options[1]:
     st.session_state.test_file = st.file_uploader("Uploading testing data: ", type=["xlsx", "xls"])
     if st.session_state.test_file:
         test_data = pd.read_excel(st.session_state.test_file)
+        X_test = test_data.drop(test_data.columns[0], axis=1)
+        y_test = test_data.iloc[:, 0]
         #st.write("Testing data:")
         #st.dataframe(test_data)
 
@@ -70,9 +80,12 @@ metric = st.radio(
     index=0,
 )
 
+
 ####################
 ## Output results ##
 ####################
+
+#Classifier is not yet applied to the selected data, but first to simple example data
 
 submit = st.button("Submit")
 if submit:
@@ -113,12 +126,11 @@ if submit:
 
     fpr, tpr, thresholds = roc_curve(y_test, y_pred_proba)
 
-    # Create DataFrame for Altair
+    # DataFrame for Altair
     roc_df = pd.DataFrame({
         "False Positive Rate": fpr,
         "True Positive Rate": tpr
     })
-
     # Altair Plot
     roc_chart = alt.Chart(roc_df).mark_line().encode(
         x=alt.X("False Positive Rate"),    #,scale=alt.Scale(domain=(0, 1))),
