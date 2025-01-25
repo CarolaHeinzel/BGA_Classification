@@ -3,7 +3,7 @@ Daten:
 1) filtered_population_eur.xlsx (British in England and Scotland, Spain, Toscani in Italy, Finland)
 2) .vcf.recode (alle Individuen +  alle Marker)
 
-Vergleiche 1) und 2) mit Crossvalidation und TabPFN, sklearn Naive Bayes mit Log Loss, Roc Auc, Accuracy and Confsion Matrix.
+Vergleiche 1) und 2) mit Crossvalidation und TabPFN, sklearn Naive Bayes mit Log Loss, Roc Auc, Accuracy and Confsion Matrix. wichtig, dass immer die gleichen Individuen pro CV verwendet werden!
 
 Diese beiden links werden dann später relevant sein:
 LEI (Könnte relevant sein):
