@@ -1,7 +1,7 @@
 
 Daten: 
 1) filtered_population_eur.xlsx (British in England and Scotland, Spain, Toscani in Italy, Finland)
-2) data_markers.txt (alle Individuen)
+2) .vcf.recode (alle Individuen +  alle Marker)
 
 Vergleiche 1) und 2) mit Crossvalidation und TabPFN, sklearn Naive Bayes mit Log Loss, Roc Auc, Accuracy and Confsion Matrix.
 
