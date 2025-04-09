@@ -3,7 +3,10 @@ Vorgehen:
 1. Verstehe die Anwendung von TabPFN auf die Daten in filtered_population_eur.xlsx
 2. Wandle die Daten in den .vcf.recode Dateien um, sodass wir TabPFN darauf anwenden können
 3. Wähle aus den 22 .vcf.recode dateien insgesamt zufällig 500 und 104 features (marker) aus + vergleiche die Ergebnisse mit denen aus filtered_population_eur.xlsx 
-4. Idealerweise: wähle die Marker nicht mehr zufällig aus sonder nach den Differenzen zwischen den Allelfrequenzen (darüber können wir auch noch mal reden)
+4. Idealerweise: wähle die Marker nicht mehr zufällig aus sonder nach den Differenzen zwischen den Allelfrequenzen (darüber können wir auch noch mal reden) <br>
+5. Verstehe den Code zur Feature Selection und wende ihn an
+6. Literaturübersicht: Feature selection in der Forensik (damit habe ich schon angefangen) und im Allgemeinen.
+
 Daten: 
 1) filtered_population_eur.xlsx (British in England and Scotland, Spain, Toscani in Italy, Finland)
 2) .vcf.recode (alle Individuen +  alle Marker)
