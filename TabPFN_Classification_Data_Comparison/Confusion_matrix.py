@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import json
 
-with open('results_TabPFN_vcf_random.json', 'r') as file:
+with open(r'results\results_TabPFN_filtered_population_eur.json', 'r') as file:
     data = json.load(file)
 
 first_key = next(iter(data[0]))
@@ -35,7 +35,7 @@ flattened_list_true = [item for sublist in true for item in sublist]
 true_labels_1 = flattened_list_true
 predictions_1 = flattened_list_pred
 
-##### for plotting the results from filtered_population_eur #####
+
 """
 mapping = {'09. Russia - Russian': 'RUS', 'British in England and Scotland': 'GBR', 'Finnish in Finland': 'FIN',
            'France': 'FRA', 'Iberian population in Spain': 'IBS', 'Italy': 'ITA', 'Turkey': 'TUR',
@@ -43,7 +43,6 @@ mapping = {'09. Russia - Russian': 'RUS', 'British in England and Scotland': 'GB
 #mapping = {'AFRICAN': 'AFR', 'AMERICAN': 'EUR', 'EAST ASIAN': 'EAS', 'EUROPEAN': 'EUR', 'MIDDLE EAST': 'ME', 'OCEANIAN': 'OCE', 'SOUTH ASIAN':'SAS'}
 true_labels_1 = [mapping[item] for item in true_labels_1]
 predictions_1 = [mapping[item] for item in predictions_1]
-#################################################################
 """
 
 def plot_confusion_matrix(true_labels, predictions, title, vmin, vmax):
@@ -74,7 +73,7 @@ def plot_confusion_matrix(true_labels, predictions, title, vmin, vmax):
     ax.set_xlabel('Predicted Population', fontsize=16)
     ax.set_ylabel('True Population', fontsize=16)
     plt.tight_layout()
-    plot_path = r'plots\cm_TabPFN_vcf_random.pdf'
+    plot_path = r'plots\cm_TabPFN_filtered_population_eur.pdf'
     plt.savefig(plot_path)
     plt.show()
 

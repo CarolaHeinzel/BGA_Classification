@@ -1,34 +1,21 @@
 
 import json
-import io
+#import io
 import os
 import glob
 import numpy as np
 import pandas as pd
 from sklearn.metrics import accuracy_score, balanced_accuracy_score, log_loss, roc_auc_score
 from sklearn.model_selection import RepeatedStratifiedKFold
-from sklearn.naive_bayes import CategoricalNB
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import OrdinalEncoder, LabelEncoder
-from sklearn.impute import SimpleImputer
+#from sklearn.naive_bayes import CategoricalNB
+#from sklearn.pipeline import Pipeline
+#from sklearn.preprocessing import OrdinalEncoder, LabelEncoder
+#from sklearn.impute import SimpleImputer
 #!pip install tabpfn
 from tabpfn import TabPFNClassifier
-from xgboost import XGBClassifier
-from sklearn.ensemble import RandomForestClassifier
+#from xgboost import XGBClassifier
+#from sklearn.ensemble import RandomForestClassifier
 from sklearn.base import BaseEstimator
-
-
-
-def get_dataset(data_path) -> [pd.DataFrame, pd.Series, list[int]]:
-    """Read in data for experiment."""
-
-    data = pd.read_excel(data_path)
-    # Convert features to categorical but leave the target variable as is
-    X = data.drop(data.columns[:6], axis=1).astype("category")  # Only convert features
-    y = data["Population"]  # Leave target variable as is
-
-    categorical_features_indices = [i for i, col in enumerate(X.columns) if X[col].dtype.name == "category"]
-    return X, y, categorical_features_indices
 
 
 def vcf_to_df(vcf_file) -> pd.DataFrame:
@@ -44,28 +31,37 @@ def vcf_to_df(vcf_file) -> pd.DataFrame:
     return df
 
 
-def get_dataset_vcf(data_path) -> [pd.DataFrame, pd.Series]:
-    """Read all vcf files and create a Dataframe in the right format
-    for Classification. And create a series with the matching y-values (populations)"""
+def load_data(data_path_vcf, data_path_y) -> [pd.DataFrame, pd.Series]:
+    """Read all vcf files and create a Dataframe in the right format for
+    Classification. And create a series with the matching y-values (populations)."""
 
-    # find all vcf files
-    files = glob.glob(os.path.join(data_path, "*.vcf"))
-    ###files = glob.glob("*.vcf")
-    #print(files)
-
+    files = glob.glob(os.path.join(data_path_vcf, "*.vcf"))
     data = pd.concat([vcf_to_df(f) for f in files])
-    X = data.astype("category").T
+    data = data.astype("category").T
 
     # read in the y-values
-    populations = pd.read_csv("1000G_SampleListWithLocations.txt", sep="\t", header=None)
+    populations = pd.read_csv(data_path_y, sep="\t", header=None)
     populations = populations.set_index(populations.columns[0])
-    y = populations.loc[X.index]
+    y = populations.loc[data.index] # only evaluate the populations occurring in the vcf files
     y = y[1]
 
-    return X, y
+    return data, y
 
 
-def get_features_random(X: pd.DataFrame, y: pd.Series) -> [pd.DataFrame, pd.Series, list[int]]:
+def get_dataset(data_path, y: pd.Series) -> [pd.DataFrame, pd.Series, list[int]]:
+    """Read in data for experiment."""
+
+    data = pd.read_excel(data_path)
+    # Convert features to categorical but leave the target variable as is
+    X = data.drop(data.columns[[0, 1, 2, 3, 5]], axis=1).astype("category")  # Only convert features
+    X = X.set_index(X.columns[0])
+    X = X.loc[y.index]
+
+    categorical_features_indices = [i for i, col in enumerate(X.columns) if X[col].dtype.name == "category"]
+    return X, y, categorical_features_indices
+
+
+def get_dataset_random_features(X: pd.DataFrame, y: pd.Series) -> [pd.DataFrame, pd.Series, list[int]]:
     # 500 random markers
     X_random = X.sample(n=500, axis=1, random_state=42)
     #print(X_random)
@@ -93,7 +89,7 @@ def compute_allelefrequencies(X: pd.DataFrame, y: pd.Series, populations: list[s
     return frequencies
 
 
-def find_markers_by_difference_of_allelefrequencies(frequencies: dict[str, dict[str, float]], pop1: str, pop2: str, top_n=83) -> pd.Index:
+def find_markers_by_difference_of_allelefrequencies(frequencies: dict[str, dict[str, float]], pop1: str, pop2: str) -> pd.Index:
     top_n = 122
     freq1, freq2 = pd.Series(frequencies[pop1]), pd.Series(frequencies[pop2])
     diff = (freq1 - freq2).abs()
@@ -103,7 +99,7 @@ def find_markers_by_difference_of_allelefrequencies(frequencies: dict[str, dict[
     return top_marker.index
 
 
-def get_features_allele(X: pd.DataFrame, y: pd.Series) -> [pd.DataFrame, pd.Series, list[int]]:
+def get_dataset_allele_features(X: pd.DataFrame, y: pd.Series) -> [pd.DataFrame, pd.Series, list[int]]:
     """Select features by the maximum difference in allele frequencies between different populations"""
     populations = ['GBR', 'TSI', 'FIN', 'IBS']
     frequencies = compute_allelefrequencies(X, y, populations)
@@ -113,8 +109,7 @@ def get_features_allele(X: pd.DataFrame, y: pd.Series) -> [pd.DataFrame, pd.Seri
         for j in range(i + 1, len(populations)):
             pop1, pop2 = populations[i], populations[j]
             markers += find_markers_by_difference_of_allelefrequencies(frequencies, pop1, pop2).tolist()
-
-    X_allel = X[list(set(markers))]
+    X_allel = X[list(set(markers))] # each marker should only occur once
     categorical_features_indices = [i for i, col in enumerate(X_allel.columns) if X_allel[col].dtype.name == "category"]
     return X_allel, y, categorical_features_indices
 
@@ -184,19 +179,24 @@ def run_cross_val(
 def run_experiments():
     """Run our experiments."""
 
+    data_path_vcf = "data_vcf" # folder containing the vcf files with DNA data
+    data_path_populations = "1000G_SampleListWithLocations.txt" # csv file with y-values (populations) for all three data sets
+    data, y = load_data(data_path_vcf, data_path_populations)
+
+
     ####### Select which data should be evaluated #######
 
     ##### data from an excel file #####
     #data_path = "filtered_population_eur.xlsx"
-    #X, y, categorical_features_indices = get_dataset(data_path)
+    #X, y, categorical_features_indices = get_dataset(data_path, y)
 
     ##### vcf data #####
-    X, y = get_dataset_vcf("data_vcf") # Folder containing the vcf files with DNA data
     ### feature selection ###
     # select 500 random features
-    X, y, categorical_features_indices = get_features_random(X, y)
+    #X, y, categorical_features_indices = get_dataset_random_features(data, y)
+
     # select features by the maximum difference in allele frequencies
-    #X, y, categorical_features_indices = get_features_allele(X, y)
+    X, y, categorical_features_indices = get_dataset_allele_features(data, y)
 
     print(X, y)
 

@@ -16,9 +16,7 @@ def plot_metric(df, metric):
 
     # Create the barplot
     plt.figure(figsize=(6, 6))
-    #sns.barplot(data=df, x="Model", y=metric, hue="Model")
     sns.barplot(data=df, x="Data", y=metric, hue="Data")
-    #sns.barplot(data=df_2, x="Data", y=metric, hue="Model")
     plt.xlabel("Data", fontsize=12)
     plt.ylabel(metric, fontsize=12)
     plt.tight_layout()
