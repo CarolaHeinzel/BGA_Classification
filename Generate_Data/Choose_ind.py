@@ -1,6 +1,6 @@
 import pandas as pd
 # Determines the names of the individuals that we are interested in
-
+# The 1000G.txt file is from Peter Pfaffelhuber's GitHub page
 
 path  = "1000G.txt"
 df = pd.read_csv(path, sep="\t", header=None)
