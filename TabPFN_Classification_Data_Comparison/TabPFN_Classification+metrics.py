@@ -16,7 +16,6 @@ from tabpfn import TabPFNClassifier
 #from xgboost import XGBClassifier
 #from sklearn.ensemble import RandomForestClassifier
 from sklearn.base import BaseEstimator
-#from Code_SHAP import prune_features_binary_classification
 from scipy.special import comb
 from cyvcf2 import VCF
 import math
