@@ -3,32 +3,35 @@ import matplotlib.pyplot as plt
 import numpy as np
 import json
 
-with open(r'results\results_TabPFN_filtered_population_eur.json', 'r') as file:
+
+model = "Naive Bayes" # "TabPFN"
+with open(r'results_TabPFN+Naive_Bayes\results_TabPFN_NB_allele.json', 'r') as file:
     data = json.load(file)
 
-first_key = next(iter(data[0]))
-last_key = next(reversed(data[0]))
+first_key = next(iter(data[0])) # Fold
+last_key = next(reversed(data[0])) # True Labels
 
 first_element = (first_key, data[0][first_key])
 last_element = (last_key, data[0][last_key])
 
-second_key = list(data[0].keys())[2]
+second_key = list(data[0].keys())[2] # Predictions
 second_element = (second_key, data[0][second_key])
 
 true = []
 pred = []
-n = 50 # num repeats of the experiments
+n = 100 # num repeats of the experiments
 for i in range(n):
-    first_key = next(iter(data[i]))
-    last_key = next(reversed(data[i]))
-    
-    first_element = (first_key, data[i][first_key])
-    last_element = (last_key, data[i][last_key])
-    
-    second_key = list(data[i].keys())[2]
-    second_element = (second_key, data[i][second_key])
-    true.append(last_element[1])
-    pred.append(second_element[1])
+    if data[i]['Model'] == model:
+        first_key = next(iter(data[i])) # Fold
+        last_key = next(reversed(data[i])) # True Labels
+
+        first_element = (first_key, data[i][first_key])
+        last_element = (last_key, data[i][last_key])
+
+        second_key = list(data[i].keys())[2]
+        second_element = (second_key, data[i][second_key])
+        true.append(last_element[1])
+        pred.append(second_element[1])
 flattened_list_pred = [item for sublist in pred for item in sublist]
 flattened_list_true = [item for sublist in true for item in sublist]
 
@@ -73,7 +76,7 @@ def plot_confusion_matrix(true_labels, predictions, title, vmin, vmax):
     ax.set_xlabel('Predicted Population', fontsize=16)
     ax.set_ylabel('True Population', fontsize=16)
     plt.tight_layout()
-    plot_path = r'plots\cm_TabPFN_filtered_population_eur.pdf'
+    plot_path = f'plots_TabPFN\\cm_NB_allele.pdf'
     plt.savefig(plot_path)
     plt.show()
 
