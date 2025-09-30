@@ -57,13 +57,13 @@ def plot_confusion_matrix(true_labels, predictions, title, vmin, vmax):
     ax.set_xlabel('Predicted Population', fontsize=16)
     ax.set_ylabel('True Population', fontsize=16)
     plt.tight_layout()
-    plot_path = Path(__file__).parent / "data" / "output_data" / "plots" / "cms" / f"cm_results_{model}_allele.pdf"
+    plot_path = Path(__file__).parent.parent / "data" / "output_data" / "plots" / "cms" / f"cm_results_{model}_allele.pdf"
     plt.savefig(plot_path)
     plt.show()
 
 
 if __name__ == "__main__":
-    data_path = Path(__file__).parent / "data" / "output_data" / "results_allele.json"
+    data_path = Path(__file__).parent.parent / "data" / "output_data" / "results_allele.json"
     with open(data_path, 'r') as file:
         data = json.load(file)
 

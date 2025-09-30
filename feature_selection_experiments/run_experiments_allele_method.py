@@ -199,7 +199,7 @@ def run_cross_val(
 
 
 def get_data():
-    data_path = Path(__file__).parent / "data" / "input_data" / "full_data.csv"
+    data_path = Path(__file__).parent.parent / "data" / "input_data" / "full_data.csv"
     data = pd.read_csv(data_path).sample(frac=1, random_state=42)
     X = data.drop(columns=["Population"]).copy()#.astype("category")
     y = data["Population"].copy()
@@ -233,7 +233,7 @@ def run_experiments():
     results_df, raw_predictions = run_cross_val(data=data, y=y, n_repeats=N_REPEATS, n_folds=N_FOLDS)
 
     # Save results to disk
-    path = Path(__file__).parent / "data" / "output_data"
+    path = Path(__file__).parent.parent / "data" / "output_data"
     results_df.to_csv(path / "results_allele.csv", index=False)
     with open(path / "results_allele.json", "w") as f:
         json.dump(raw_predictions, f)

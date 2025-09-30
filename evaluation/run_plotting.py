@@ -13,13 +13,13 @@ def plot_metric(df, metric, model):
     classification based on the specified metric."""
 
     # Ensure the 'plots' directory exists
-    path_for_fig = Path(__file__).parent / "data" / "output_data" / "plots"
+    path_for_fig = Path(__file__).parent.parent / "data" / "output_data" / "plots"
     path_for_fig.mkdir(parents=True, exist_ok=True)
 
     # Create the barplot
     sns.set_style("whitegrid")
     plt.figure(figsize=(12, 8))
-    ax = sns.barplot(data=df, x="Name", y=metric, hue="Name")
+    ax = sns.barplot(data=df, x="Name", y=metric, hue="Name", width=0.4)
     #plt.xlabel("Feature Selection Method", fontsize=12)
     plt.xlabel("Feature Selection Method", fontsize=20)
     #plt.xticks(rotation=45, fontsize=10)
@@ -47,7 +47,7 @@ def compute_metric(df, metric):
 
 if __name__ == "__main__":
 
-    data_path = Path(__file__).parent / "data" / "output_data"
+    data_path = Path(__file__).parent.parent / "data" / "output_data"
 
     # data to compare
     df_allele = pd.read_csv(data_path / "results_allele.csv") # allele
@@ -77,7 +77,7 @@ if __name__ == "__main__":
     metrics = ["Accuracy", "Balanced Accuracy", "ROC AUC", "Log Loss"]
     for model in ["TabPFN", "NaiveBayes"]:
         df_filtered = df[df["Model"].str.contains(model, na=False)]
-        print(df_filtered)
+        #print(df_filtered)
         for metric in metrics:
             compute_metric(df_filtered, metric)
             plot_metric(df_filtered, metric, model)
