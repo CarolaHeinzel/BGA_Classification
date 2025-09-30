@@ -1,7 +1,0 @@
-altair==5.5.0
-streamlit==1.41.1
-pandas==2.2.3
-numpy==2.0.2
-scikit-learn==1.6.1
-umap-learn==0.5.7
-shap==0.46.0
