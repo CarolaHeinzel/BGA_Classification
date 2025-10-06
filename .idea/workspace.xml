@@ -5,16 +5,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="65ed656e-9036-422f-90c3-f2a036f741e8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/data/output_data/plots/NaiveBayes_Accuracy.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/data/output_data/plots/NaiveBayes_Accuracy.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/output_data/plots/NaiveBayes_Balanced_Accuracy.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/output_data/plots/NaiveBayes_Log_Loss.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/data/output_data/plots/NaiveBayes_Log_Loss.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/output_data/plots/NaiveBayes_ROC_AUC.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/data/output_data/plots/NaiveBayes_ROC_AUC.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/output_data/plots/TabPFN_Accuracy.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/data/output_data/plots/TabPFN_Accuracy.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/output_data/plots/TabPFN_Balanced_Accuracy.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/output_data/plots/TabPFN_Log_Loss.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/data/output_data/plots/TabPFN_Log_Loss.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/output_data/plots/TabPFN_ROC_AUC.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/data/output_data/plots/TabPFN_ROC_AUC.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/evaluation/run_plotting.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/run_plotting.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/streamlit/Streamlit.py" beforeDir="false" afterPath="$PROJECT_DIR$/streamlit/Streamlit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output_data/baseline_results.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output_data/baseline_results.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output_data/plots/cms/cm_baseline_results_AGFeaturesC_NaiveBayes.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output_data/plots/cms/cm_baseline_results_AGFeaturesC_NaiveBayes_200features.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output_data/plots/cms/cm_baseline_results_AGFeaturesC_NaiveBayes_50features.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output_data/plots/cms/cm_baseline_results_AGFeaturesC_TabPFN.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output_data/plots/cms/cm_baseline_results_AGFeaturesC_TabPFN_200features.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output_data/plots/cms/cm_baseline_results_AGFeaturesC_TabPFN_50features.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output_data/plots/cms/cm_baseline_results_StaticExpertFeatures_NaiveBayes.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output_data/plots/cms/cm_baseline_results_StaticExpertFeatures_TabPFN.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output_data/plots/cms/cm_results_NaiveBayes.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/data/output_data/plots/cms/cm_results_NaiveBayes.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output_data/plots/cms/cm_results_NaiveBayes_allele.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/data/output_data/plots/cms/cm_results_NaiveBayes_allele.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output_data/plots/cms/cm_results_RandomFeatures_NaiveBayes.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/data/output_data/plots/cms/cm_results_RandomFeatures_NaiveBayes.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output_data/plots/cms/cm_results_RandomFeatures_TabPFN.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/data/output_data/plots/cms/cm_results_RandomFeatures_TabPFN.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output_data/plots/cms/cm_results_TabPFN.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/data/output_data/plots/cms/cm_results_TabPFN.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output_data/plots/cms/cm_results_TabPFN_allele.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/data/output_data/plots/cms/cm_results_TabPFN_allele.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/evaluation/confusion_matrix.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/confusion_matrix.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature_selection_experiments/run_crossvalidation.py" beforeDir="false" afterPath="$PROJECT_DIR$/feature_selection_experiments/run_crossvalidation.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,7 +53,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/there/Desktop/Theresa/Hiwistelle/TabPFN/BGA_Classification/feature_selection_experiments/run_experiments_allele_method.py"
+    "last_opened_file_path": "C:/Users/there/Desktop/Theresa/Hiwistelle/TabPFN/BGA_Classification/evaluation/run_plotting.py"
   }
 }]]></component>
   <component name="SharedIndexes">

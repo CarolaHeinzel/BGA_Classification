@@ -39,23 +39,23 @@ def plot_confusion_matrix(true_labels, predictions, title, vmin, vmax):
 
     cm_normalized = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
     cm_normalized = np.nan_to_num(cm_normalized) 
-    fig, ax = plt.subplots(figsize=(6, 6))
+    fig, ax = plt.subplots(figsize=(8, 8))
     ax.imshow(cm_normalized, interpolation='nearest', cmap=plt.cm.Blues, vmin=vmin, vmax=vmax)
 
     ax.set_title(title)
     ax.set_xticks(np.arange(len(classes)))
     ax.set_yticks(np.arange(len(classes)))
-    ax.set_xticklabels(classes)
-    ax.set_yticklabels(classes)
+    ax.set_xticklabels(classes, fontsize=20)
+    ax.set_yticklabels(classes, fontsize=20)
     plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
 
     for i in range(len(classes)):
         for j in range(len(classes)):
             ax.text(j, i, f'{cm_normalized[i, j]:.2f}',
-                    ha="center", va="center", color="black")
+                    ha="center", va="center", color="black", fontsize=20)
 
-    ax.set_xlabel('Predicted Population', fontsize=16)
-    ax.set_ylabel('True Population', fontsize=16)
+    ax.set_xlabel('Predicted Population', fontsize=24)
+    ax.set_ylabel('True Population', fontsize=24)
     plt.tight_layout()
     plot_path = Path(__file__).parent.parent / "data" / "output_data" / "plots" / "cms" / f"cm_results_{model}_allele.pdf"
     plt.savefig(plot_path)
@@ -67,8 +67,8 @@ if __name__ == "__main__":
     with open(data_path, 'r') as file:
         data = json.load(file)
 
-    """models = ["AGFeaturesC_TabPFN", "AGFeaturesC_NaiveBayes", #"RandomFeatures_TabPFN", "RandomFeatures_NaiveBayes",
-              "StaticExpertFeatures_TabPFN", "StaticExpertFeatures_NaiveBayes"]#, "TabPFN", "NaiveBayes"]"""
+    #models = ["AGFeaturesC_TabPFN", "AGFeaturesC_NaiveBayes", #"RandomFeatures_TabPFN", "RandomFeatures_NaiveBayes",
+              #"StaticExpertFeatures_TabPFN", "StaticExpertFeatures_NaiveBayes"]#, "TabPFN", "NaiveBayes"]
     models = ["TabPFN", "NaiveBayes"]
 
     for model in models:
@@ -76,7 +76,7 @@ if __name__ == "__main__":
 
         mapping = {'09. Russia - Russian': 'RUS', 'British in England and Scotland': 'GBR', 'Finnish in Finland': 'FIN',
                    'France': 'FRA', 'Iberian population in Spain': 'IBS', 'Italy': 'ITA', 'Turkey': 'TUR',
-                   'Utah Residents (CEPH) with N & W European ancestry': 'UtahEU'}
+                   'Utah Residents (CEPH) with N & W European ancestry': 'CEU'}
 
         true_labels_1 = [mapping[item] for item in true_labels_1]
         predictions_1 = [mapping[item] for item in predictions_1]

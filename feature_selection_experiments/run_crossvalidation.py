@@ -128,7 +128,7 @@ def get_models(categorical_features_indices: list[int]) -> dict[str, BaseEstimat
 
 def run_cross_val(
     *,
-    data: pd.DataFrame,
+    X: pd.DataFrame,
     y: pd.Series,
     n_repeats: int,
     n_folds: int,
@@ -141,17 +141,22 @@ def run_cross_val(
     raw_predictions = []
 
     # Cross-validation loop
-    original_column_order = data.columns.tolist()
+    original_column_order = X.columns.tolist()
 
-    for fold, (train_index, test_index) in enumerate(kf.split(data, y), start=1):
+    for fold, (train_index, test_index) in enumerate(kf.split(X, y), start=1):
         print(f"==== Fold {fold}")
 
         # Shuffle the order of the features to ensure fair comparison
-        data = data[np.random.RandomState(fold).permutation(original_column_order)]
+        X = X[np.random.RandomState(fold).permutation(original_column_order)]
 
+        X_train = X.iloc[train_index]
+        X_test = X.iloc[test_index]
         y_train, y_test = y.iloc[train_index], y.iloc[test_index]
 
-        #################### feature selection ####################
+        # all data is categorical
+        categorical_features_indices = [i for i in range(X.shape[1])]
+
+        """#################### feature selection ####################
         data_train = data.iloc[train_index]
 
         # Select features based on allele frequency differences computed from the training data
@@ -159,10 +164,7 @@ def run_cross_val(
         markers, categorical_features_indices = get_markers(data_train, y_train, populations)
 
         X = data[markers]
-        ###########################################################
-
-        X_train = X.iloc[train_index]
-        X_test = X.iloc[test_index]
+        ###########################################################"""
 
         models = get_models(categorical_features_indices)
 
@@ -191,7 +193,7 @@ def run_cross_val(
                     "Predictions": y_pred.tolist(),
                     "Predictions Probabilities": y_pred_proba.tolist(),
                     "True Labels": y_test.tolist(),
-                    "feature_names": markers,
+                    #"feature_names": markers,
                 },
             )
 
@@ -199,23 +201,17 @@ def run_cross_val(
 
 
 def get_data():
-    data_path = Path(__file__).parent.parent / "data" / "input_data" / "full_data.csv"
-    data = pd.read_csv(data_path).sample(frac=1, random_state=42)
-    X = data.drop(columns=["Population"]).copy()#.astype("category")
+    data_path = Path(__file__).parent.parent
+    file_name = "1-s2.0-S1872497323000285-mmc5_EUR.csv"
+    # file_name = "all_1000G_Enhanced.csv"
+    # file_name = "EUR_5_markerselection_try2.csv"
+    # file_name = "all_1000G_new_markers.csv"
+    data = pd.read_csv(data_path / file_name).sample(frac=1, random_state=42)
+    #print(data)
+    X = data.drop(columns=["Population"]).copy().astype("category")
+    print(X)
     y = data["Population"].copy()
     del data
-
-    merge_map = {
-        "CA": "AC",
-        "GA": "AG",
-        "TA": "AT",
-        "GC": "CG",
-        "TC": "CT",
-        "TG": "GT"
-    }
-
-    # ensure that "1|0" and "0|1" are treated as the same"
-    X = X.replace(merge_map).astype("category")
 
     # Sanity check
     n_cols = len(X.columns)
@@ -228,14 +224,14 @@ def get_data():
 def run_experiments():
     """Run our experiments."""
 
-    data, y = get_data()
+    X, y = get_data()
 
-    results_df, raw_predictions = run_cross_val(data=data, y=y, n_repeats=N_REPEATS, n_folds=N_FOLDS)
+    results_df, raw_predictions = run_cross_val(X=X, y=y, n_repeats=N_REPEATS, n_folds=N_FOLDS)
 
     # Save results to disk
-    path = Path(__file__).parent.parent / "data" / "output_data"
-    results_df.to_csv(path / "results_allele.csv", index=False)
-    with open(path / "results_allele.json", "w") as f:
+    path = Path(__file__).parent.parent
+    results_df.to_csv(path / f"results_{file_name}.csv", index=False)
+    with open(path / f"results_{file_name}.json", "w") as f:
         json.dump(raw_predictions, f)
 
 
