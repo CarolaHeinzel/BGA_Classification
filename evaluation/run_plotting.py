@@ -18,12 +18,15 @@ def plot_metric(df, metric, model):
 
     # Create the barplot
     sns.set_style("whitegrid")
-    plt.figure(figsize=(12, 8))
-    ax = sns.barplot(data=df, x="Name", y=metric, hue="Name", width=0.4)
+    #plt.figure(figsize=(12, 8))
+    plt.figure(figsize=(9, 8))
+    ax = sns.barplot(data=df, x="Name", y=metric, hue="Name", width=0.6)
     #plt.xlabel("Feature Selection Method", fontsize=12)
-    plt.xlabel("Feature Selection Method", fontsize=20)
+    plt.xlabel("Marker Selection Method", fontsize=20)
     #plt.xticks(rotation=45, fontsize=10)
-    plt.xticks(rotation=45, fontsize=17)
+    #plt.xticks(rotation=45, fontsize=17)
+    plt.xticks(rotation=45, fontsize=15)
+    plt.yticks(fontsize=12)
     #plt.ylabel(metric, fontsize=12)
     plt.ylabel(metric, fontsize=20)
 
@@ -51,30 +54,30 @@ if __name__ == "__main__":
 
     # data to compare
     df_allele = pd.read_csv(data_path / "results_allele.csv") # allele
-    df_allele["Name"] = ["Allele Freq. Method,\n100 Features" for _ in range(120)]
+    df_allele["Name"] = ["Allele freq. method,\n100 markers" for _ in range(120)]
 
     df_baseline = pd.read_csv(data_path / "baseline_results_neu.csv") # AGFeatures, StaticExpert
-    df_baseline["Name"] = ["New Method,\n 100 Features" if df_baseline["Model"][i].split("_")[0]=="AGFeaturesC"
-                           else "Expert knowledge,\n104 Features" for i in range(240)]
+    df_baseline["Name"] = ["PI-DL,\n100 markers" if df_baseline["Model"][i].split("_")[0]=="AGFeaturesC"
+                           else "VISAGE Enhanced\nTool" for i in range(240)]
 
     df_baseline_alt = pd.read_csv(data_path / "baseline_results_wo_tabm.csv") # random, all
     df_baseline_alt = df_baseline_alt[df_baseline_alt["Model"].isin(["TabPFN", "NaiveBayes"])].reset_index() #"RandomFeatures_TabPFN", "RandomFeatures_NaiveBayes",
     df_baseline_alt = df_baseline_alt.drop(columns="index")
-    df_baseline_alt["Name"] = ["All Features" for _ in range(120)]
+    df_baseline_alt["Name"] = ["All markers" for _ in range(120)]
     #df_baseline_alt["Name"] = [df_baseline_alt["Model"][i].split("_")[0] if len(df_baseline_alt["Model"][i].split("_")[0]) > 12 else "All features" for i in range(240)]
 
     df_200 = pd.read_csv(data_path / "baseline_results_200features.csv") # AGFeatures 200
     df_200 = df_200[df_200["Model"].isin(["AGFeaturesC_TabPFN", "AGFeaturesC_NaiveBayes"])]
-    df_200["Name"] = ["New Method,\n200 Features" for _ in range(120)]
+    df_200["Name"] = ["PI-DL,\n200 markers" for _ in range(120)]
 
     df_50 = pd.read_csv(data_path / "baseline_results_50features.csv") # AGFeatures 50
     df_50 = df_50[df_50["Model"].isin(["AGFeaturesC_TabPFN", "AGFeaturesC_NaiveBayes"])]
-    df_50["Name"] = ["New Method,\n50 Features" for _ in range(120)]
+    df_50["Name"] = ["PI-DL,\n50 markers" for _ in range(120)]
 
     df = pd.concat([df_baseline, df_allele, df_baseline_alt, df_200, df_50]).reset_index()
     df = df.drop(columns="index")
 
-    metrics = ["Accuracy", "Balanced Accuracy", "ROC AUC", "Log Loss"]
+    metrics = ["Accuracy", "ROC AUC", "Log Loss"] #"Balanced Accuracy"
     for model in ["TabPFN", "NaiveBayes"]:
         df_filtered = df[df["Model"].str.contains(model, na=False)]
         #print(df_filtered)

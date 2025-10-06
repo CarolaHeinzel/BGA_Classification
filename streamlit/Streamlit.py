@@ -21,14 +21,11 @@ st.header("BGA Classification")
 ################################
 
 ###### Example data ######
-#file_path = "filtered_population.xlsx" #####################
-#data = pd.read_excel(file_path, nrows=212) # just use the first two categories of the file as example data
-#X = data.drop(data.columns[0], axis=1)
-#y = data.iloc[:, 0]  # population as target
-
-# 20% as testing data, remaining as training data
-# Splitting the data while maintaining the distribution of population categories
-#X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+#file_path = "Path(__file__).parent.parent / "data" / "input_data" / "full_data.csv"
+#data = pd.read_csv(file_path).sample(frac=1, random_state=42)
+#X = data.drop(columns=["Population"]).copy()#.astype("category")
+#y = data["Population"].copy()
+#del data
 
 ### Simple example data #####################
 data_train = pd.DataFrame({
@@ -56,21 +53,26 @@ train_options = [
     "Example data",
     "Upload data"]
 train = st.radio(
-    "Which training data should be used?",
+    "Which data should be used?",
     options=train_options,
     index=0,
 )
 
 if train == train_options[1]:
-    st.session_state.train_file = st.file_uploader("Uploading training data: ", type=["xlsx", "xls"])
+    st.session_state.train_file = st.file_uploader("Uploading training data: ", type=["csv"])
     if st.session_state.train_file:
-        train_data = pd.read_excel(st.session_state.train_file)
-        X_train = train_data.drop(train_data.columns[0], axis=1)
-        y_train = train_data.iloc[:, 0]
+        #train_data = pd.read_csv(st.session_state.train_file)
+        #X_train = train_data.drop(train_data.columns[0], axis=1)
+        #y_train = train_data.iloc[:, 0]
+
+        data = pd.read_csv(st.session_state.train_file).sample(frac=1,random_state=42)
+        X = data.drop(columns=["Population"]).copy()#.astype("category")
+        y = data["Population"].copy()
+        del data
 
 
 ###### Testing data ######
-test_options = [
+"""test_options = [
     "Example data",
     "Upload data"]
 test = st.radio(
@@ -84,7 +86,7 @@ if test == test_options[1]:
     if st.session_state.test_file:
         test_data = pd.read_excel(st.session_state.test_file)
         X_test = test_data.drop(test_data.columns[0], axis=1)
-        y_test = test_data.iloc[:, 0]
+        y_test = test_data.iloc[:, 0]"""
 
 
 ###### Metric ######
