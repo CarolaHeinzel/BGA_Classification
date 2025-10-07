@@ -57,13 +57,14 @@ def plot_confusion_matrix(true_labels, predictions, title, vmin, vmax):
     ax.set_xlabel('Predicted Population', fontsize=24)
     ax.set_ylabel('True Population', fontsize=24)
     plt.tight_layout()
-    plot_path = Path(__file__).parent.parent / "data" / "output_data" / "plots" / "cms" / f"cm_results_{model}_allele.pdf"
+    plot_path = Path(__file__).parent.parent / "data" / "output_data" / "plots" / "cms" / f"cm_{model}_mmc5_EUR.pdf"
     plt.savefig(plot_path)
     plt.show()
 
 
 if __name__ == "__main__":
-    data_path = Path(__file__).parent.parent / "data" / "output_data" / "results_allele.json"
+    #data_path = Path(__file__).parent.parent / "data" / "output_data" / "results_allele.json"
+    data_path = Path(__file__).parent.parent / "results_1-s2.0-S1872497323000285-mmc5_EUR.json"
     with open(data_path, 'r') as file:
         data = json.load(file)
 
@@ -76,7 +77,8 @@ if __name__ == "__main__":
 
         mapping = {'09. Russia - Russian': 'RUS', 'British in England and Scotland': 'GBR', 'Finnish in Finland': 'FIN',
                    'France': 'FRA', 'Iberian population in Spain': 'IBS', 'Italy': 'ITA', 'Turkey': 'TUR',
-                   'Utah Residents (CEPH) with N & W European ancestry': 'CEU'}
+                   'Toscani in Italia': 'TSI', 'Utah Residents (CEPH) with N & W European ancestry': 'CEU',
+                   'AFRICAN': 'AFR', 'EUROPEAN': 'EUR', 'SOUTH ASIAN': 'SAS', 'EAST ASIAN': 'EAS', 'ADMIXED AMERICAN': 'AMR'}
 
         true_labels_1 = [mapping[item] for item in true_labels_1]
         predictions_1 = [mapping[item] for item in predictions_1]

@@ -25,83 +25,6 @@ N_FEATURES = 100
 """Max number of features to select for the models with feature selection."""
 
 
-def compute_allelefrequencies(X: pd.DataFrame, y: pd.Series, populations: list[str]) -> dict[str, dict[str, float]]:
-    """Compute the allelefrequencies for each population from a given Dataframe with DNA data"""
-
-    frequencies = {}
-
-    X_freq = pd.DataFrame(index=X.index, columns=X.columns)
-    for col in X.columns:
-        idx = X[col].first_valid_index()
-
-        # whole column has no entry
-        if idx == None:
-            X_freq[col] = 0
-        else:
-            char = X[col][idx][0]
-            X_freq[col] = X[col].astype(str).str.count(char)
-
-    for pop in populations:
-        indices = y[y == pop].index
-        X_pop = X_freq.loc[indices]
-        allele_counts = X_pop.sum(axis=0)
-
-        # Frequenz berechnen: (Summe der '1'-Allele) / (Anzahl Individuen mit gültigen Einträgen * 2)
-        #marker_frequencies = (allele_counts / (len(indices) * 2)).to_dict()
-        marker_frequencies = {col: (allele_counts[col] / (X_pop[col].count() * 2))
-                                if X_pop[col].count() > 0 else 0 for col in X_pop.columns}
-
-        frequencies[pop] = marker_frequencies
-
-    return frequencies
-
-
-def find_markers_by_difference_of_allelefrequencies(frequencies: dict[str, dict[str, float]], pop1: str, pop2: str, top_n: int) -> pd.Index:
-    freq1, freq2 = pd.Series(frequencies[pop1]), pd.Series(frequencies[pop2])
-    diff = (freq1 - freq2).abs()
-
-    top_marker = diff.sort_values(ascending=False).head(top_n)
-    #print(top_marker.index)
-    return top_marker.index
-
-
-def get_markers(X: pd.DataFrame, y: pd.Series, populations: list[str]) -> [list[str], list[int]]:
-    """Select features by the maximum difference in allele frequencies between different populations"""
-
-    print("Computation of frequencies...")
-
-    frequencies = compute_allelefrequencies(X, y, populations)
-
-    markers = set()  # each marker should only occur ones
-
-    # ensure that exactly N markers are selected
-    n = len(populations)
-    top_n = math.floor(N_FEATURES / comb(n, 2, exact=True))
-    find = False
-
-    while len(markers) < N_FEATURES:
-        for i in range(n):
-            for j in range(i + 1, n):
-                pop1, pop2 = populations[i], populations[j]
-                markers.update(find_markers_by_difference_of_allelefrequencies(frequencies, pop1, pop2, top_n))
-                if len(markers) == 100:
-                    find = True
-                    break
-            if find:
-                break
-        if find:
-            break
-        top_n += 1
-
-    markers = list(markers)
-
-    print(f"Number of selected features: {len(markers)}")
-
-    # all data is categorical
-    categorical_features_indices = [i for i in range(len(markers))]
-
-    return markers, categorical_features_indices
-
 
 def get_models(categorical_features_indices: list[int]) -> dict[str, BaseEstimator]:
     """Sklearn models to compare."""
@@ -156,16 +79,6 @@ def run_cross_val(
         # all data is categorical
         categorical_features_indices = [i for i in range(X.shape[1])]
 
-        """#################### feature selection ####################
-        data_train = data.iloc[train_index]
-
-        # Select features based on allele frequency differences computed from the training data
-        populations = y_train.unique().tolist()
-        markers, categorical_features_indices = get_markers(data_train, y_train, populations)
-
-        X = data[markers]
-        ###########################################################"""
-
         models = get_models(categorical_features_indices)
 
         for model_name, model in models.items():
@@ -200,16 +113,12 @@ def run_cross_val(
     return pd.DataFrame(results), raw_predictions
 
 
-def get_data():
-    data_path = Path(__file__).parent.parent
-    file_name = "1-s2.0-S1872497323000285-mmc5_EUR.csv"
-    # file_name = "all_1000G_Enhanced.csv"
-    # file_name = "EUR_5_markerselection_try2.csv"
-    # file_name = "all_1000G_new_markers.csv"
+def get_data(file_name):
+    data_path = Path(__file__).parent.parent / "data" / "input_data"
     data = pd.read_csv(data_path / file_name).sample(frac=1, random_state=42)
-    #print(data)
-    X = data.drop(columns=["Population"]).copy().astype("category")
-    print(X)
+    #data = pd.read_csv(file_name).sample(frac=1, random_state=42)
+
+    X = data.drop(columns=["Population", "ID"]).copy().astype("category")
     y = data["Population"].copy()
     del data
 
@@ -224,14 +133,20 @@ def get_data():
 def run_experiments():
     """Run our experiments."""
 
-    X, y = get_data()
+    #file_name = "1-s2.0-S1872497323000285-mmc5_EUR.csv"
+    #file_name = "all_1000G_Enhanced.csv"
+    # file_name = "EUR_5_markerselection_try2.csv"
+    file_name = "all_1000G_new_markers.csv"
+
+    X, y = get_data(file_name)
+    print(X)
 
     results_df, raw_predictions = run_cross_val(X=X, y=y, n_repeats=N_REPEATS, n_folds=N_FOLDS)
 
     # Save results to disk
-    path = Path(__file__).parent.parent
-    results_df.to_csv(path / f"results_{file_name}.csv", index=False)
-    with open(path / f"results_{file_name}.json", "w") as f:
+    #path = Path(__file__).parent.parent
+    results_df.to_csv(f"results_{file_name}.csv", index=False)
+    with open(f"results_{file_name}.json", "w") as f:
         json.dump(raw_predictions, f)
 
 
