@@ -226,7 +226,7 @@ def baum_welch(X, K, n_iters, p, d_values, delta_q, delta_r):
 
         ############### Q plotten ####################
 
-        # Gitter im Dreieck (q1+q2 <= 1)
+        """# Gitter im Dreieck (q1+q2 <= 1)
         res = 15
         q1 = np.linspace(0, 0.5, res)
         q2 = np.linspace(0, 0.5, res)
@@ -241,8 +241,8 @@ def baum_welch(X, K, n_iters, p, d_values, delta_q, delta_r):
 
         # Startwerte
         r0 = 0
-        Z = np.array([opt([q1, q2, q3, r0]) for q1, q2, q3 in zip(Q1, Q2, Q3)])
-        Z = np.array([Q(X, np.array([q1, q2, q3]), r0, d_values, p, gamma, log_xi) for q1, q2, q3 in zip(Q1, Q2, Q3)])
+        #Z = np.array([opt([q1, q2, q3, r0]) for q1, q2, q3 in zip(Q1, Q2, Q3)])
+        Z = np.array([Q(X, np.log(np.array([q1, q2, q3])), r0, d_values, p, gamma, log_xi) for q1, q2, q3 in zip(Q1, Q2, Q3)])
 
 
         surf = ax.plot_trisurf(Q1, Q2, Z, cmap="viridis", linewidth=0.2)
@@ -254,7 +254,7 @@ def baum_welch(X, K, n_iters, p, d_values, delta_q, delta_r):
         def update(frame):
             ax.clear()
             r = frame / 10  # r läuft von 0 bis 1
-            Z = np.array([Q(X, np.array([q1, q2, q3]), r, d_values, p, gamma, log_xi) for q1, q2, q3 in zip(Q1, Q2, Q3)])
+            Z = np.array([Q(X, np.log(np.array([q1, q2, q3])), r, d_values, p, gamma, log_xi) for q1, q2, q3 in zip(Q1, Q2, Q3)])
             surf = ax.plot_trisurf(Q1, Q2, Z, cmap="viridis", linewidth=0.2)
 
             ax.set_title(f"r = {r:.2f}")
@@ -265,7 +265,7 @@ def baum_welch(X, K, n_iters, p, d_values, delta_q, delta_r):
 
         ani = animation.FuncAnimation(fig, update, frames=10, interval=200, blit=False)
 
-        plt.show()
+        plt.show()"""
         ##################################################
 
     return q, r
