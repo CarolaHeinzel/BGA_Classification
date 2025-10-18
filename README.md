@@ -1,7 +1,9 @@
 # Feature Selection Study for Tabular Machine Learning on BGA Classification
 
-This repsository contains:
+This repository contains:
 
+### Code to run the feature selection experiments:
+```run_experiment_feature_selection.py```
 
 ## Usage
 
