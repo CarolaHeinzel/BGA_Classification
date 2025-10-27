@@ -6,7 +6,7 @@ This repository contains:
 - `data/output_data/fe_results/agg.py` -Calculation of the aggregated feature importances over all splits
 - `feature_selection_experiments/run_experiments_baselines.py` -Evaluation of the feature selection with the PI Method and the Visage Enhage Tool using Cross-validation for TabPFN and NaiveBayes
 - `feature_selection_experiments/run_experiments_allele_method.py` -Code for feature selection with allele frequency method and evaluation
-- `data\input_data\full_data.csv` 
+- `data/input_dataf/ull_data.csv` 
 - `evaluation/run_plotting.py` -code for plotting the mean of ROC AUC, accuracy and logloss for the results from crossvalidation
 - `evaluation/confusion_matrix.py` -code for plotting the confusion matrix
 - `streamlit/Streamlit.py` -Local Graphical User Interface for the feature selection with PI Method and Evaluation
