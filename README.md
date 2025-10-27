@@ -34,8 +34,8 @@ sbatch --array=0-59%100 submit_gpu.sh
 3.  `feature_selection_experiments/run_experiments_baselines.py`: Evaluation of the selected features with cross-validation for TabPFN and NaiveBayes
 
 ### Run the experiments (Local Graphical User Interface)
-`streamlit/streamlit.py`: All of the steps above at once in a browser
-Usage: streamlit run streamlit/streamlit.py
+- `streamlit/streamlit.py`: All of the steps above at once in a browser
+- Usage: streamlit run streamlit/streamlit.py
 
 ---
 The repository contains also:
