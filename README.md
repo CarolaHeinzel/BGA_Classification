@@ -29,16 +29,16 @@ sbatch --array=0-59%100 submit_gpu.sh
 
 
 ### Run the experiments (Command Line)
-1.  `feature_selection_experiments/run_experiment_feature_selection.py`: Calculation of the feature importances for one split (we did 60 splits overall)
-2.  `data/output_data/fe_results/agg.py`: Aggregierte feature importance berechnen aus den Ergebnisse aus 1. für alle splits
-3.  `feature_selection_experiments/run_experiments_baselines.py`: Auswertung der ausgewählten features mit Crossvalidation für TabPFN und NaiveBayes
+1.  `feature_selection_experiments/run_experiment_feature_selection.py`: Calculation of feature importances for one split (we did 60 splits overall)
+2.  `data/output_data/fe_results/agg.py`: Calculate the aggregated feature importance from the results of 1.
+3.  `feature_selection_experiments/run_experiments_baselines.py`: Evaluation of the selected features with cross-validation for TabPFN and NaiveBayes
 
-### (Local Graphical User Interface)
-`streamlit/streamlit.py`: All of the steps above at once in a browser (just need to upload your own data)
+### Run the experiments (Local Graphical User Interface)
+`streamlit/streamlit.py`: All of the steps above at once in a browser
 Usage: streamlit run streamlit/streamlit.py
 
 ---
 The repository contains also:
-- `feature_selection_experiments/run_experiments_allele_method.py`: 
+- `feature_selection_experiments/run_experiments_allele_method.py`: Code for feature selection with the allele frequency method and evaluation
 - `evaluation/run_plotting.py`: code for plotting the mean of ROC AUC, accuracy and logloss for the results from crossvalidation
 - `evaluation/confusion_matrix.py`: code for plotting the confusion matrix
