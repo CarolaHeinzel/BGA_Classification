@@ -68,7 +68,7 @@ sbatch --array=0-59%100 submit_gpu.sh
 
 ## Data
 * `1-s2.0-S1872497323000285-mmc5_EUR.csv`: Example test and training data. This is a subset of the data published as a Supplemental (`1-s2.0-S1872497323000285-mmc5.xlsx`) of [Ruiz-Ramirez et al](https://pubmed.ncbi.nlm.nih.gov/36917866/).<br>
-The other data is from the 1000 Genomes Project.
+* The other data is from the 1000 Genomes Project.
 
 
 ## Funding Acknowledgement
