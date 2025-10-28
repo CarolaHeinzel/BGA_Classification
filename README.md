@@ -52,3 +52,7 @@ sbatch --array=0-59%100 submit_gpu.sh
 ### Run the experiments (Local Graphical User Interface)
 
 ```streamlit run streamlit/Streamlit.py```
+
+## Funding Acknowledgement
+
+Funded by the Deutsche Forschungsgemeinschaft (DFG, German Research Foundation) – Project-ID 499552394 – SFB 1597.
