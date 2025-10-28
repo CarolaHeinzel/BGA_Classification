@@ -51,5 +51,4 @@ sbatch --array=0-59%100 submit_gpu.sh
 
 ### Run the experiments (Local Graphical User Interface)
 
-```streamlit run streamlit/Streamlit.py
-```
+```streamlit run streamlit/Streamlit.py```
