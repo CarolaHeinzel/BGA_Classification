@@ -23,15 +23,27 @@ We recommend to use `uv` and Python 3.11 and a Linux OS. The tutorial below alre
 installation process.
 
 ```bash
-pip install uv
-uv venv --seed --python 3.11 ~/.venvs/tabarena
-source ~/.venvs/tabarena/bin/activate
+#!/bin/bash
+
+# Install uv globally (only needed once)
 pip install uv
 
-# Install AutoGluon (comes with TabPFN)
-uv pip install autogluon["tabarena"] 
-# For linting and formatting
+# Create a new virtual environment with Python 3.11
+# You can change the path if you prefer a different location
+uv venv --seed --python 3.11 ~/.venvs/feature_selection_BGA
+
+# Activate the environment
+source ~/.venvs/feature_selection_BGA/bin/activate
+
+# Ensure uv is available inside the environment
+pip install uv
+
+# Install project dependencies from requirements.txt
+uv pip install -r requirements.txt
+
+# Install Ruff for linting and formatting
 uv pip install ruff
+
 ```
 
 
