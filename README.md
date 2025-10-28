@@ -1,7 +1,9 @@
 # Feature Selection Study for Tabular Machine Learning on BGA Classification
 
 ## Overview
+
 This repository contains:
+
 - `feature_selection_experiments/run_experiment_feature_selection.py` - Calculates feature importances for a single data split using Permutation Importance (PI)
 - `data/output_data/fe_results/agg.py` - Calculation of the aggregated feature importances across all splits
 - `feature_selection_experiments/run_experiments_baselines.py` - Evaluation of the selected features with the PI Method and the Visage Enhage Tool using cross-validation for TabPFN and NaiveBayes
@@ -42,10 +44,12 @@ sbatch --array=0-59%100 submit_gpu.sh
 
 
 ### Run the experiments (Command Line)
+
 1.  `feature_selection_experiments/run_experiment_feature_selection.py`: Calculation of feature importances for one split (we did 60 splits overall)
 2.  `data/output_data/fe_results/agg.py`: Calculate the aggregated feature importance from the results of 1.
 3.  `feature_selection_experiments/run_experiments_baselines.py`: Evaluation of the selected features with cross-validation
 
 ### Run the experiments (Local Graphical User Interface)
+
 ```streamlit run streamlit/Streamlit.py
 ```
