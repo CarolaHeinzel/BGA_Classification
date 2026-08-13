@@ -1,0 +1,166 @@
+How to Convert the Filtered 1000 Genomes VCF File to a CSV Genotype Matrix
+
+This guide explains how to convert the filtered 1000 Genomes VCF file into a compressed CSV genotype matrix.
+
+Input files
+===========
+
+1. Combined filtered VCF file:
+
+   EUR.MAF01.biallelicSNP.allchr.vcf.gz
+
+   This file should contain:
+   - autosomal chromosomes 1-22,
+   - European (EUR) individuals only,
+   - PASS variants only,
+   - variants with EUR minor allele frequency (MAF) >= 0.01,
+   - biallelic SNPs only.
+
+2. 1000 Genomes population metadata file:
+
+   integrated_call_samples_v3.20130502.ALL.panel
+
+   This file is used to assign each individual to one of the European populations:
+   CEU, FIN, GBR, IBS, or TSI.
+
+3. Python conversion script:
+
+   vcf_to_csv.py
+
+
+Required software
+=================
+
+The following software must be installed:
+
+- Python 3
+- bcftools
+
+Directory setup
+===============
+
+Place the following files in the same directory:
+
+   EUR.MAF01.biallelicSNP.allchr.vcf.gz
+   integrated_call_samples_v3.20130502.ALL.panel
+   vcf_to_csv.py
+
+If the files are stored in different directories, change the corresponding file paths inside vcf_to_csv.py.
+
+
+Run the conversion
+==================
+
+From the directory containing the files, run:
+
+   python3 vcf_to_csv.py
+
+The script reads the VCF file, extracts the genotype of each European individual, converts each genotype to a dosage value, and writes the result to a compressed CSV file.
+
+
+Genotype encoding
+=================
+
+Genotypes are encoded as the number of alternative alleles:
+
+   0|0 or 0/0  ->  0
+   0|1 or 1|0  ->  1
+   0/1 or 1/0  ->  1
+   1|1 or 1/1  ->  2
+
+Missing genotypes are written as:
+
+   NA
+
+
+Output file
+===========
+
+The script creates:
+
+   EUR.MAF01.biallelicSNP.allchr.dosage.csv.gz
+
+This is a gzip-compressed CSV file.
+
+The CSV has the following structure:
+
+   Position,HG00096,HG00097,HG00099,...
+   Population,GBR,GBR,GBR,...
+   1:10583,0,1,2,...
+   1:10611,1,0,0,...
+   2:10133,0,2,1,...
+
+The first row contains the individual identifiers.
+
+The second row contains the population of each individual.
+
+Each subsequent row corresponds to one SNP.
+
+The SNP identifier is stored as:
+
+   chromosome:position
+
+For example:
+
+   1:10583
+
+This is used instead of the genomic position alone because the same numerical position can occur on different chromosomes.
+
+
+Contents of the CSV
+===================
+
+The CSV contains only:
+
+- SNP position (chromosome:position),
+- individual identifiers,
+- population labels,
+- genotype dosages (0, 1, 2, or NA).
+
+It does not contain additional VCF information such as:
+
+- REF,
+- ALT,
+- rsID,
+- QUAL,
+- FILTER,
+- INFO fields.
+
+
+Monitoring progress
+===================
+
+While running, the script prints a progress message after every 100,000 SNPs, for example:
+
+   100,000 SNPs written
+   200,000 SNPs written
+   300,000 SNPs written
+
+At the end, it prints the total number of SNPs written and the name of the output file.
+
+
+Reading the resulting file in Python
+====================================
+
+The compressed CSV can be read directly with pandas:
+
+   import pandas as pd
+
+   df = pd.read_csv(
+       "EUR.MAF01.biallelicSNP.allchr.dosage.csv.gz",
+       header=None
+   )
+
+Because the genotype matrix can be very large, loading the complete file into memory may require substantial RAM. For large analyses, it is preferable to read the file in chunks or process it without loading the entire matrix at once.
+
+
+Notes
+=====
+
+- The output is compressed with gzip to reduce storage requirements.
+- The file can be decompressed with:
+
+   gunzip EUR.MAF01.biallelicSNP.allchr.dosage.csv.gz
+
+- The uncompressed CSV can be very large.
+- The compressed CSV can also be used directly by many Python and R tools without manual decompression.
